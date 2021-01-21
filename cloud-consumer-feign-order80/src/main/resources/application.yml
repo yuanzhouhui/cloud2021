@@ -10,3 +10,7 @@ eureka:
 ribbon:
   ReadTimeout: 5000
   ConnectTimeout: 5000
+
+logging:
+  level:
+    com.bright.springcloud.service.PaymentFeignService: debug
