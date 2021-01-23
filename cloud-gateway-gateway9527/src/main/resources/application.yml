@@ -28,6 +28,8 @@ spring:
             #- Host=**.somehost.org,**.anotherhost.org
             #- Method=GET
             #- Query=
+          filter:
+            #- AddRequestHeader=X-Request-Id, 1024
 
 eureka:
   instance:
