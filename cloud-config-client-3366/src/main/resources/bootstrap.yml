@@ -1,15 +1,15 @@
 server:
-  port: 3355
+  port: 3366
 
 spring:
   application:
     name: config-client
   cloud:
     config:
-      label: main #分支
-      name: config #配置文件名称
-      profile: dev #读取后缀名称
-      uri: http://localhost:3344 #配置中心地址
+      label: main
+      name: config
+      profile: dev
+      uri: http://localhost:3344
   #rabbitmq相关配置
   rabbitmq:
     host: localhost
