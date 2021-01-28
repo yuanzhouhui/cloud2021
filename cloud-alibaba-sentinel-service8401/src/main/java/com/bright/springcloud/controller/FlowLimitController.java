@@ -34,7 +34,9 @@ public class FlowLimitController {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		log.info("testD RT测试");
+		//log.info("testD RT测试");
+		log.info("testD 异常比例");
+		int age = 10 / 0;
 		return "-----------D";
 	}
 }
