@@ -4,7 +4,9 @@ import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.bright.springcloud.entities.CommonResult;
 import com.bright.springcloud.entities.Payment;
+import com.bright.springcloud.service.NacosPaymentService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,5 +52,13 @@ public class CircleBreakerController {
 	public CommonResult<Payment> blockHandler(@PathVariable("id") Long id, BlockException exception) {
 		Payment payment = new Payment(id, null);
 		return new CommonResult(445, "blockHandler-sentinel限流,无此流水：blockException" + exception.getMessage(), payment);
+	}
+
+	@Resource
+	private NacosPaymentService nacosPaymentService;
+
+	@GetMapping(value = "/consumer/payment/{id}")
+	private CommonResult<Payment> paymentSql(@PathVariable("id") Long id) {
+		return nacosPaymentService.paymentSql(id);
 	}
 }
