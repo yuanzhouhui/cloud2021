@@ -1,6 +1,7 @@
 package com.bright.springcloud.controller;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.bright.springcloud.entities.CommonResult;
 import com.bright.springcloud.entities.Payment;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,8 @@ public class CircleBreakerController {
 
 	@RequestMapping("/consumer/fallback/{id}")
 	//@SentinelResource(value = "fallback")//无配置
-	@SentinelResource(value = "fallback", fallback = "handlerFallback")//只配fallback
+	//@SentinelResource(value = "fallback", fallback = "handlerFallback")//只配fallback
+	@SentinelResource(value = "fallback", blockHandler = "blockHandler")//只配blockHandler
 	public CommonResult<Payment> fallback(@PathVariable("id") Long id) {
 		CommonResult<Payment> result = restTemplate.getForObject(SERVICE_URL + "/payment/" + id, CommonResult.class, id);
 		if (id == 4) {
@@ -39,8 +41,13 @@ public class CircleBreakerController {
 		return result;
 	}
 
-	public CommonResult<Payment> handlerFallback(@PathVariable("id") Long id, Throwable e) {
+	/*public CommonResult<Payment> handlerFallback(@PathVariable("id") Long id, Throwable e) {
 		Payment payment = new Payment(id, null);
 		return new CommonResult(444, "兜底异常handlerFallback,exception内容：" + e.getMessage(), payment);
+	}*/
+
+	public CommonResult<Payment> blockHandler(@PathVariable("id") Long id, BlockException exception) {
+		Payment payment = new Payment(id, null);
+		return new CommonResult(445, "blockHandler-sentinel限流,无此流水：blockException" + exception.getMessage(), payment);
 	}
 }
