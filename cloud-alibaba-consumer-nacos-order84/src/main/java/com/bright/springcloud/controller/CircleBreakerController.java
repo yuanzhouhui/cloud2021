@@ -30,7 +30,8 @@ public class CircleBreakerController {
 	@RequestMapping("/consumer/fallback/{id}")
 	//@SentinelResource(value = "fallback")//无配置
 	//@SentinelResource(value = "fallback", fallback = "handlerFallback")//只配fallback
-	@SentinelResource(value = "fallback", blockHandler = "blockHandler")//只配blockHandler
+	//@SentinelResource(value = "fallback", blockHandler = "blockHandler")//只配blockHandler
+	@SentinelResource(value = "fallback", fallback = "handlerFallback", blockHandler = "blockHandler", exceptionsToIgnore = {IllegalArgumentException.class})
 	public CommonResult<Payment> fallback(@PathVariable("id") Long id) {
 		CommonResult<Payment> result = restTemplate.getForObject(SERVICE_URL + "/payment/" + id, CommonResult.class, id);
 		if (id == 4) {
@@ -41,10 +42,10 @@ public class CircleBreakerController {
 		return result;
 	}
 
-	/*public CommonResult<Payment> handlerFallback(@PathVariable("id") Long id, Throwable e) {
+	public CommonResult<Payment> handlerFallback(@PathVariable("id") Long id, Throwable e) {
 		Payment payment = new Payment(id, null);
 		return new CommonResult(444, "兜底异常handlerFallback,exception内容：" + e.getMessage(), payment);
-	}*/
+	}
 
 	public CommonResult<Payment> blockHandler(@PathVariable("id") Long id, BlockException exception) {
 		Payment payment = new Payment(id, null);
