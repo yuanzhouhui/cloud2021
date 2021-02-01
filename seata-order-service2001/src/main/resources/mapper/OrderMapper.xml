@@ -13,7 +13,7 @@
     id, user_id, product_id, `count`, money, `status`
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from t_order
     where id = #{id,jdbcType=BIGINT}
@@ -23,9 +23,9 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bright.springcloud.alibaba.domain.Order" useGeneratedKeys="true">
-    insert into t_order (user_id, product_id, `count`, 
+    insert into t_order (user_id, product_id, `count`,
       money, `status`)
-    values (#{userId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, #{count,jdbcType=INTEGER}, 
+    values (#{userId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, #{count,jdbcType=INTEGER},
       #{money,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bright.springcloud.alibaba.domain.Order" useGeneratedKeys="true">
@@ -94,5 +94,14 @@
       money = #{money,jdbcType=DECIMAL},
       `status` = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
+  </update>
+  <insert id="create">
+    insert into t_order(id, user_id, product_id, `count`, money, `status`)
+    values (null,#{userId},#{productId},#{count},#{money},0)
+  </insert>
+  <update id="update">
+    update t_order set status = 1
+    where user_id = #{userId}
+    and status = #{status}
   </update>
 </mapper>
